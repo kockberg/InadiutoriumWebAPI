@@ -1,0 +1,88 @@
+﻿@model IEnumerable<InadiutoriumWebAPI.Models.CalendarDateModel>
+
+@{
+    ViewBag.Title = "InadiutoriumWebAPI";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Monday celebrations</h2>
+
+<div class="container">
+    <div class="row">
+        <form class="form-inline" method="get" action="./">
+            <div class="form-group">
+                <label for="startDate">Start date:</label>
+                <input type="date" class="form-control" id="startDate" name="startDate" min="1970-01-01" value="@Request["startDate"]" required>
+            </div>
+            <div class="form-group">
+                <label for="endDate">End date:</label>
+                <input type="date" class="form-control" id="endDate" name="endDate" min="1970-01-01" value="@Request["endDate"]" required>
+            </div>
+            <button type="submit" class="btn" id="searchBtn">Search</button>
+        </form>
+    </div>
+</div>
+
+<div id="alertArea">
+    <hr />
+    <div class="alert alert-danger" role="alert">
+        <p id="alertTextField">
+        </p>
+    </div>
+</div>
+
+
+<hr />
+
+<div class="container">
+    <div class="row">
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">
+                        @Html.DisplayName("Date")
+                    </th>
+                    <th scope="col">
+                        @Html.DisplayName("Season")
+                    </th>
+                    <th scope="col">
+                        @Html.DisplayName("Weekday")
+                    </th>
+                    <th scope="col">
+                        @Html.DisplayName("Celebrations")
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    foreach (var item in Model.Where(d => d.Weekday.Equals("monday")))
+                    {
+                        <tr>
+                            <th scope="row">
+                                @item.Date.ToString("dd.MM.yyyy")
+                            </th>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Season)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Weekday)
+                            </td>
+                            <td>
+                                @foreach (var celebrationItem in item.Celebrations)
+                                {
+                                    @Html.DisplayFor(modelItem => celebrationItem.Title)
+                                    if (item.Celebrations.Count > 1)
+                                    {
+                                        <br />
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
